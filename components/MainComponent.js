@@ -1,65 +1,52 @@
 import React, { Component } from 'react';
+import { createStackNavigator } from '@react-navigation/stack';
+import { createDrawerNavigator } from '@react-navigation/drawer';
+import { NavigationContainer } from '@react-navigation/native';
 import Home from './HomeComponent';
 import Directory from './DirectoryComponent';
 import FormInfo from './FormInfoComponent';
-import { View, Platform } from 'react-native';
-import { createStackNavigator, createDrawerNavigator } from 'react-navigation';
 
-const DirectoryNavigator = createStackNavigator(
-    {
-        Directory: { screen: Directory },
-        FormInfo: { screen: FormInfo }
-    },
-    {
-        initialRouteName: 'Directory',
-        navigationOptions: {
-            headerStyle: {
-                backgroundColor: '#5637DD'
-            },
-            headerTintColor: '#fff',
-            headerTitleStyle: {
-                color: '#fff'
-            }
-        }
-    }
-);
+const Stack = createStackNavigator();
+const Drawer = createDrawerNavigator();
 
-const HomeNavigator = createStackNavigator(
-    {
-        Home: { screen: Home }
-    },
-    {
-        navigationOptions: {
-            headerStyle: {
-                backgroundColor: '#5637DD'
-            },
-            headerTintColor: '#fff',
-            headerTitleStyle: {
-                color: '#fff'
-            }
-        }
-    }
-);
+const DirectoryNavigator = () =>
+    <Stack.Navigator>
+        <Stack.Screen
+            name="Directory"
+            component={Directory}
+        />
+        <Stack.Screen
+            name="FormInfo"
+            component={FormInfo}
+        />
+    </Stack.Navigator>;
 
-const MainNavigator = createDrawerNavigator(
-    {
-        Home: { screen: HomeNavigator },
-        Directory: { screen: DirectoryNavigator }
-    },
-    {
-        drawerBackgroundColor: '#CEC8FF'
-    }
-);
+const HomeNavigator = () =>
+    <Stack.Navigator>
+        <Stack.Screen
+            name="Home"
+            component={Home}
+        />
+    </Stack.Navigator>;
+
+const MainNavigator = () =>
+    <Drawer.Navigator>
+        <Drawer.Screen
+            name="Home"
+            component={HomeNavigator}
+        />
+        <Drawer.Screen
+            name="Directory"
+            component={DirectoryNavigator}
+        />
+    </Drawer.Navigator>
 
 class Main extends Component {
     render() {
         return (
-            <View style={{
-                flex: 1,
-                paddingTop: Platform.OS === 'ios' ? 0 : Expo.Constants.statusBarHeight
-            }}>
+            <NavigationContainer>
                 <MainNavigator />
-            </View>
+            </NavigationContainer>
         );
     }
 }
